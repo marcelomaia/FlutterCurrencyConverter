@@ -1,0 +1,6 @@
+package com.marcelomaiatech.currencyconverter
+
+import io.flutter.embedding.android.FlutterActivity
+
+class MainActivity: FlutterActivity() {
+}
