@@ -18,7 +18,29 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  double dolar;
+  final realController = TextEditingController();
+  final dollarController = TextEditingController();
+  final euroController = TextEditingController();
+
+  void onRealChanged(String value) {
+    double real = double.parse(value);
+    dollarController.text = (real / dollar).toStringAsFixed(2);
+    euroController.text = (real / euro).toStringAsFixed(2);
+  }
+
+  void onDollarChanged(String value) {
+    double dollar = double.parse(value);
+    realController.text = (dollar * this.dollar).toStringAsFixed(2);
+    euroController.text = (dollar * this.dollar / euro).toStringAsFixed(2);
+  }
+
+  void onEuroChanged(String value) {
+    double euro = double.parse(value);
+    realController.text = (euro * this.euro).toStringAsFixed(2);
+    dollarController.text = (euro * this.euro / dollar).toStringAsFixed(2);
+  }
+
+  double dollar;
   double euro;
 
   @override
@@ -39,7 +61,7 @@ class _HomeState extends State<Home> {
                 if (snapshot.hasError) {
                   return Center(child: Text('Erro...'));
                 } else {
-                  dolar = snapshot.data['results']['currencies']['USD']['buy'];
+                  dollar = snapshot.data['results']['currencies']['USD']['buy'];
                   euro = snapshot.data['results']['currencies']['EUR']['buy'];
                   return SingleChildScrollView(
                       padding: EdgeInsets.only(left: 15, right: 15),
@@ -50,32 +72,32 @@ class _HomeState extends State<Home> {
                             Icons.monetization_on,
                             size: 150,
                           ),
-                          TextField(
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                                labelText: 'Reais',
-                                border: OutlineInputBorder(),
-                                prefix: Text('R\$ ')),
-                          ),
-                          TextField(
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                                labelText: 'Dólares',
-                                border: OutlineInputBorder(),
-                                prefix: Text('\$ ')),
-                          ),
-                          TextField(
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                                labelText: 'Euro',
-                                border: OutlineInputBorder(),
-                                prefix: Text('€ ')),
-                          )
+                          buildTextField(
+                              'Reais', 'R\$', realController, onRealChanged),
+                          Divider(),
+                          buildTextField('Dollars', '\$', dollarController,
+                              onDollarChanged),
+                          Divider(),
+                          buildTextField(
+                              'Euro', '€', euroController, onEuroChanged)
                         ],
                       ));
                 }
             }
           },
         ));
+  }
+
+  TextField buildTextField(String label, String symbol,
+      TextEditingController controller, Function f) {
+    return TextField(
+      onChanged: f,
+      controller: controller,
+      keyboardType: TextInputType.number,
+      decoration: InputDecoration(
+          labelText: label,
+          border: OutlineInputBorder(),
+          prefix: Text('$symbol ')),
+    );
   }
 }
