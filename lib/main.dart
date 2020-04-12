@@ -18,6 +18,9 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  double dolar;
+  double euro;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +39,40 @@ class _HomeState extends State<Home> {
                 if (snapshot.hasError) {
                   return Center(child: Text('Erro...'));
                 } else {
-                  return Container(color: Colors.green);
+                  dolar = snapshot.data['results']['currencies']['USD']['buy'];
+                  euro = snapshot.data['results']['currencies']['EUR']['buy'];
+                  return SingleChildScrollView(
+                      padding: EdgeInsets.only(left: 15, right: 15),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          Icon(
+                            Icons.monetization_on,
+                            size: 150,
+                          ),
+                          TextField(
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                                labelText: 'Reais',
+                                border: OutlineInputBorder(),
+                                prefix: Text('R\$ ')),
+                          ),
+                          TextField(
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                                labelText: 'Dólares',
+                                border: OutlineInputBorder(),
+                                prefix: Text('\$ ')),
+                          ),
+                          TextField(
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                                labelText: 'Euro',
+                                border: OutlineInputBorder(),
+                                prefix: Text('€ ')),
+                          )
+                        ],
+                      ));
                 }
             }
           },
