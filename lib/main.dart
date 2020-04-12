@@ -6,7 +6,7 @@ void main() async {
     theme: ThemeData(
       primaryColor: Colors.amber,
       brightness: Brightness.dark,
-      accentColor: Colors.pink,
+      accentColor: Colors.amberAccent,
     ),
     home: Home(),
   ));
@@ -70,6 +70,7 @@ class _HomeState extends State<Home> {
                         children: <Widget>[
                           Icon(
                             Icons.monetization_on,
+                            color: Colors.amber,
                             size: 150,
                           ),
                           buildTextField(
